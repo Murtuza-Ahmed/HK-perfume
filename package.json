@@ -5,6 +5,7 @@
   "type": "module",
   "homepage": "https://Murtuza-Ahmed.github.io/HK-perfume",
   "scripts": {
+    "start": "node dist/server/server.js",
     "deploy": "gh-pages -d dist",
     "dev": "vite dev",
     "build": "vite build",
