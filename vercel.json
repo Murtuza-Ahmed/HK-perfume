@@ -1,6 +1,5 @@
 {
   "buildCommand": "npm run build",
-  "public": "dist/client",
   "functions": {
     "dist/server/server.js": {
       "runtime": "@vercel/node@3"
@@ -17,11 +16,3 @@
     }
   ]
 }
-
-
-
-
-
-
-
-
