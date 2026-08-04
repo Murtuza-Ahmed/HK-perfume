@@ -70,9 +70,26 @@ export const getPostBySlug = createServerFn({ method: "GET" })
     return { post, related: related ?? [] };
   });
 
+// export const getBusinessInfo = createServerFn({ method: "GET" }).handler(async () => {
+//   const sb = publicClient();
+//   const { data } = await sb.from("business_info").select("*").eq("id", 1).maybeSingle();
+//   return data;
+// });
+
 export const getBusinessInfo = createServerFn({ method: "GET" }).handler(async () => {
   const sb = publicClient();
-  const { data } = await sb.from("business_info").select("*").eq("id", 1).maybeSingle();
+
+  const { data, error } = await sb
+    .from("business_info")
+    .select("*")
+    .eq("id", 1)
+    .maybeSingle();
+
+  if (error) {
+    console.error("Business info error:", error);
+    throw new Error(error.message);
+  }
+
   return data;
 });
 
