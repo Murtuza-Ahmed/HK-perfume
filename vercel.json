@@ -1,0 +1,18 @@
+{
+  "buildCommand": "npm run build",
+  "functions": {
+    "vercel-server.js": {
+      "runtime": "nodejs@20.x"
+    }
+  },
+  "routes": [
+    {
+      "src": "/assets/(.*)",
+      "dest": "/dist/client/assets/$1"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/vercel-server.js"
+    }
+  ]
+}
