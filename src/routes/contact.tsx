@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { abs } from "@/lib/seo/site";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { getBusinessInfo } from "@/lib/storefront.functions";
 import { ld, localBusinessLd, breadcrumbLd } from "@/lib/seo/jsonld";
@@ -15,24 +16,41 @@ export const Route = createFileRoute("/contact")({
     return {
       meta: [
         { title: `Contact & Visit | ${b?.name ?? "Lumen & Oud"}` },
-        { name: "description", content: `Visit our Dubai boutique or reach our concierge by email and phone. ${b?.description ?? ""}` },
+        {
+          name: "description",
+          content: `Visit our Dubai boutique or reach our concierge by email and phone. ${b?.description ?? ""}`,
+        },
         { property: "og:title", content: `Contact ${b?.name ?? "Lumen & Oud"}` },
         { property: "og:description", content: "Boutique address, hours, and concierge contact." },
-        { property: "og:url", content: "/contact" },
+        { property: "og:url", content: abs("/contact") },
       ],
-      links: [{ rel: "canonical", href: "/contact" }],
-      scripts: b ? [
-        ld(breadcrumbLd([{ name: "Home", path: "/" }, { name: "Contact", path: "/contact" }])),
-        ld(localBusinessLd({
-          name: b.name, description: b.description ?? undefined,
-          phone: b.phone ?? undefined, email: b.email ?? undefined,
-          street: b.street ?? undefined, city: b.city ?? undefined,
-          region: b.region ?? undefined, postalCode: b.postal_code ?? undefined,
-          country: b.country ?? undefined,
-          lat: b.lat ? Number(b.lat) : undefined, lng: b.lng ? Number(b.lng) : undefined,
-          hours: (b.hours as unknown as Hour[]) ?? [],
-        })),
-      ] : [],
+      links: [{ rel: "canonical", href: abs("/contact") }],
+      scripts: b
+        ? [
+            ld(
+              breadcrumbLd([
+                { name: "Home", path: "/" },
+                { name: "Contact", path: "/contact" },
+              ]),
+            ),
+            ld(
+              localBusinessLd({
+                name: b.name,
+                description: b.description ?? undefined,
+                phone: b.phone ?? undefined,
+                email: b.email ?? undefined,
+                street: b.street ?? undefined,
+                city: b.city ?? undefined,
+                region: b.region ?? undefined,
+                postalCode: b.postal_code ?? undefined,
+                country: b.country ?? undefined,
+                lat: b.lat ? Number(b.lat) : undefined,
+                lng: b.lng ? Number(b.lng) : undefined,
+                hours: (b.hours as unknown as Hour[]) ?? [],
+              }),
+            ),
+          ]
+        : [],
     };
   },
   component: ContactPage,
@@ -49,17 +67,30 @@ function ContactPage() {
       <div className="grid gap-12 lg:grid-cols-2 mt-12">
         <div>
           <div className="space-y-5">
-            <div className="flex gap-3"><MapPin size={18} className="text-primary mt-1" />
+            <div className="flex gap-3">
+              <MapPin size={18} className="text-primary mt-1" />
               <div>
                 <p className="text-foreground font-medium">Atelier</p>
-                <p className="text-sm text-muted-foreground">{b.street}<br />{b.city}, {b.region} {b.postal_code}<br />{b.country}</p>
+                <p className="text-sm text-muted-foreground">
+                  {b.street}
+                  <br />
+                  {b.city}, {b.region} {b.postal_code}
+                  <br />
+                  {b.country}
+                </p>
               </div>
             </div>
-            <div className="flex gap-3"><Mail size={18} className="text-primary mt-1" />
-              <a href={`mailto:${b.email}`} className="text-sm hover:text-primary">{b.email}</a>
+            <div className="flex gap-3">
+              <Mail size={18} className="text-primary mt-1" />
+              <a href={`mailto:${b.email}`} className="text-sm hover:text-primary">
+                {b.email}
+              </a>
             </div>
-            <div className="flex gap-3"><Phone size={18} className="text-primary mt-1" />
-              <a href={`tel:${b.phone}`} className="text-sm hover:text-primary">{b.phone}</a>
+            <div className="flex gap-3">
+              <Phone size={18} className="text-primary mt-1" />
+              <a href={`tel:${b.phone}`} className="text-sm hover:text-primary">
+                {b.phone}
+              </a>
             </div>
           </div>
           <div className="mt-10">
@@ -76,7 +107,12 @@ function ContactPage() {
         </div>
         <div className="card-surface overflow-hidden aspect-[4/3]">
           {b.map_embed_url && (
-            <iframe src={b.map_embed_url} title="Boutique location" loading="lazy" className="h-full w-full border-0" />
+            <iframe
+              src={b.map_embed_url}
+              title="Boutique location"
+              loading="lazy"
+              className="h-full w-full border-0"
+            />
           )}
         </div>
       </div>

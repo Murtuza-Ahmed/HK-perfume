@@ -13,7 +13,9 @@ export function Breadcrumbs({ items }: { items: { name: string; path: string }[]
               {isLast ? (
                 <span className="text-foreground">{it.name}</span>
               ) : (
-                <Link to={it.path} className="hover:text-primary">{it.name}</Link>
+                <Link to={it.path} className="hover:text-primary">
+                  {it.name}
+                </Link>
               )}
             </li>
           );

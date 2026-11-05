@@ -1,0 +1,37 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Typecheck
+        run: npx tsc --noEmit
+
+      - name: Lint
+        run: npx eslint src/
+
+      - name: Build
+        run: npm run build
+
+# CD: Vercel auto-deploys on every push to main via its GitHub integration.
+# Required Vercel environment variables (Project Settings → Environment Variables):
+#   SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY            (server)
+#   VITE_SUPABASE_URL, VITE_SUPABASE_PUBLISHABLE_KEY  (client, baked at build time)
+# NOTE: .env must NOT be listed in .vercelignore, otherwise the client bundle
+# gets `undefined` for the VITE_ vars and client-side navigation crashes.

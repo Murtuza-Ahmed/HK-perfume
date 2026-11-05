@@ -11,30 +11,75 @@ export function SiteFooter() {
             <span>Oud</span>
           </div>
           <p className="text-sm text-muted-foreground mt-4 max-w-xs">
-            A curated boutique of fine fragrances, mechanical watches, and handcrafted Islamic topis.
+            A curated boutique of fine fragrances, mechanical watches, and handcrafted Islamic
+            topis.
           </p>
         </div>
         <div>
           <p className="eyebrow mb-4">Shop</p>
           <ul className="space-y-2 text-sm">
-            <li><Link to="/category/$slug" params={{ slug: "perfumes" }} className="text-muted-foreground hover:text-primary">Perfumes</Link></li>
-            <li><Link to="/category/$slug" params={{ slug: "watches" }} className="text-muted-foreground hover:text-primary">Watches</Link></li>
-            <li><Link to="/category/$slug" params={{ slug: "topis" }} className="text-muted-foreground hover:text-primary">Topis</Link></li>
+            <li>
+              <Link
+                to="/category/$slug"
+                params={{ slug: "perfumes" }}
+                className="text-muted-foreground hover:text-primary"
+              >
+                Perfumes
+              </Link>
+            </li>
+            <li>
+              <Link
+                to="/category/$slug"
+                params={{ slug: "watches" }}
+                className="text-muted-foreground hover:text-primary"
+              >
+                Watches
+              </Link>
+            </li>
+            <li>
+              <Link
+                to="/category/$slug"
+                params={{ slug: "topis" }}
+                className="text-muted-foreground hover:text-primary"
+              >
+                Topis
+              </Link>
+            </li>
           </ul>
         </div>
         <div>
           <p className="eyebrow mb-4">Discover</p>
           <ul className="space-y-2 text-sm">
-            <li><Link to="/blog" className="text-muted-foreground hover:text-primary">Buying guides</Link></li>
-            <li><Link to="/about" className="text-muted-foreground hover:text-primary">Our story</Link></li>
-            <li><Link to="/contact" className="text-muted-foreground hover:text-primary">Visit the boutique</Link></li>
+            <li>
+              <Link to="/blog" className="text-muted-foreground hover:text-primary">
+                Buying guides
+              </Link>
+            </li>
+            <li>
+              <Link to="/about" className="text-muted-foreground hover:text-primary">
+                Our story
+              </Link>
+            </li>
+            <li>
+              <Link to="/contact" className="text-muted-foreground hover:text-primary">
+                Visit the boutique
+              </Link>
+            </li>
           </ul>
         </div>
         <div>
           <p className="eyebrow mb-4">Account</p>
           <ul className="space-y-2 text-sm">
-            <li><Link to="/auth" className="text-muted-foreground hover:text-primary">Sign in</Link></li>
-            <li><Link to="/account" className="text-muted-foreground hover:text-primary">My account</Link></li>
+            <li>
+              <Link to="/auth" className="text-muted-foreground hover:text-primary">
+                Sign in
+              </Link>
+            </li>
+            <li>
+              <Link to="/account" className="text-muted-foreground hover:text-primary">
+                My account
+              </Link>
+            </li>
           </ul>
         </div>
       </div>
