@@ -3,10 +3,16 @@ import type {} from "@tanstack/react-start";
 import { createClient } from "@supabase/supabase-js";
 import type { Database } from "@/integrations/supabase/types";
 
-// TODO: replace with your project URL once a project name or custom domain is set.
-const BASE_URL = "";
+import { SITE_URL } from "@/lib/seo/site";
 
-interface SitemapEntry { path: string; lastmod?: string; changefreq?: "weekly" | "monthly" | "daily"; priority?: string; }
+const BASE_URL = SITE_URL;
+
+interface SitemapEntry {
+  path: string;
+  lastmod?: string;
+  changefreq?: "weekly" | "monthly" | "daily";
+  priority?: string;
+}
 
 export const Route = createFileRoute("/sitemap.xml")({
   server: {
@@ -28,19 +34,37 @@ export const Route = createFileRoute("/sitemap.xml")({
           { path: "/about", changefreq: "monthly", priority: "0.6" },
           { path: "/contact", changefreq: "monthly", priority: "0.6" },
           { path: "/blog", changefreq: "weekly", priority: "0.8" },
-          ...(cats ?? []).map((c) => ({ path: `/category/${c.slug}`, changefreq: "weekly" as const, priority: "0.8" })),
-          ...(products ?? []).map((p) => ({ path: `/product/${p.slug}`, lastmod: p.updated_at, changefreq: "weekly" as const, priority: "0.7" })),
-          ...(posts ?? []).map((p) => ({ path: `/blog/${p.slug}`, lastmod: p.published_at, changefreq: "monthly" as const, priority: "0.6" })),
+          ...(cats ?? []).map((c) => ({
+            path: `/category/${c.slug}`,
+            changefreq: "weekly" as const,
+            priority: "0.8",
+          })),
+          ...(products ?? []).map((p) => ({
+            path: `/product/${p.slug}`,
+            lastmod: p.updated_at,
+            changefreq: "weekly" as const,
+            priority: "0.7",
+          })),
+          ...(posts ?? []).map((p) => ({
+            path: `/blog/${p.slug}`,
+            lastmod: p.published_at,
+            changefreq: "monthly" as const,
+            priority: "0.6",
+          })),
         ];
 
-        const urls = entries.map((e) => [
-          `  <url>`,
-          `    <loc>${BASE_URL}${e.path}</loc>`,
-          e.lastmod ? `    <lastmod>${e.lastmod}</lastmod>` : null,
-          e.changefreq ? `    <changefreq>${e.changefreq}</changefreq>` : null,
-          e.priority ? `    <priority>${e.priority}</priority>` : null,
-          `  </url>`,
-        ].filter(Boolean).join("\n"));
+        const urls = entries.map((e) =>
+          [
+            `  <url>`,
+            `    <loc>${BASE_URL}${e.path}</loc>`,
+            e.lastmod ? `    <lastmod>${e.lastmod}</lastmod>` : null,
+            e.changefreq ? `    <changefreq>${e.changefreq}</changefreq>` : null,
+            e.priority ? `    <priority>${e.priority}</priority>` : null,
+            `  </url>`,
+          ]
+            .filter(Boolean)
+            .join("\n"),
+        );
 
         const xml = [
           `<?xml version="1.0" encoding="UTF-8"?>`,

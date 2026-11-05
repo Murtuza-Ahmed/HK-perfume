@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { abs } from "@/lib/seo/site";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { getHomeData } from "@/lib/storefront.functions";
 import { ProductCard } from "@/components/product-card";
@@ -11,17 +12,27 @@ export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
       { title: "Lumen & Oud — Niche Perfumes, Watches & Handcrafted Topis" },
-      { name: "description", content: "Discover niche oud perfumes, Swiss mechanical watches, and handcrafted Islamic topis. Curated and concierge-shipped worldwide." },
-      { name: "keywords", content: "niche perfume, oud, mechanical watch, islamic topi, kufi, luxury boutique" },
+      {
+        name: "description",
+        content:
+          "Discover niche oud perfumes, Swiss mechanical watches, and handcrafted Islamic topis. Curated and concierge-shipped worldwide.",
+      },
+      {
+        name: "keywords",
+        content: "niche perfume, oud, mechanical watch, islamic topi, kufi, luxury boutique",
+      },
       { property: "og:title", content: "Lumen & Oud" },
-      { property: "og:description", content: "Niche perfumes, mechanical watches, and handcrafted Islamic topis." },
-      { property: "og:url", content: "/" },
-      { property: "og:image", content: "/images/hero-home.webp" },
-      { name: "twitter:image", content: "/images/hero-home.webp" },
+      {
+        property: "og:description",
+        content: "Niche perfumes, mechanical watches, and handcrafted Islamic topis.",
+      },
+      { property: "og:url", content: abs("/") },
+      { property: "og:image", content: abs("/images/hero-home.webp") },
+      { name: "twitter:image", content: abs("/images/hero-home.webp") },
     ],
     links: [
-      { rel: "canonical", href: "/" },
-      { rel: "preload", as: "image", href: "/images/hero-home.webp", fetchpriority: "high" },
+      { rel: "canonical", href: abs("/") },
+      { rel: "preload", as: "image", href: abs("/images/hero-home.webp"), fetchPriority: "high" },
     ],
   }),
   component: HomePage,
@@ -48,11 +59,16 @@ function HomePage() {
             Rare scents, quiet horology, and the cloth of devotion.
           </h1>
           <p className="mt-6 max-w-xl text-base md:text-lg text-muted-foreground">
-            A small house curating fragrances, mechanical watches, and handcrafted topis. Each piece is chosen, serviced, and shipped with care.
+            A small house curating fragrances, mechanical watches, and handcrafted topis. Each piece
+            is chosen, serviced, and shipped with care.
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
-            <Link to="/category/$slug" params={{ slug: "perfumes" }} className="btn-gold">Explore the library</Link>
-            <Link to="/blog" className="btn-outline">Read the guides</Link>
+            <Link to="/category/$slug" params={{ slug: "perfumes" }} className="btn-gold">
+              Explore the library
+            </Link>
+            <Link to="/blog" className="btn-outline">
+              Read the guides
+            </Link>
           </div>
         </div>
       </section>
@@ -116,7 +132,9 @@ function HomePage() {
             <p className="eyebrow">From the editors</p>
             <h2 className="font-display text-4xl mt-2">Buying guides</h2>
           </div>
-          <Link to="/blog" className="text-sm text-primary hover:underline">All guides →</Link>
+          <Link to="/blog" className="text-sm text-primary hover:underline">
+            All guides →
+          </Link>
         </div>
         <div className="grid gap-8 md:grid-cols-3">
           {data.posts.map((p) => (
@@ -131,7 +149,9 @@ function HomePage() {
                   className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
                 />
               </div>
-              <h3 className="font-display text-xl mt-4 leading-tight group-hover:text-primary transition-colors">{p.title}</h3>
+              <h3 className="font-display text-xl mt-4 leading-tight group-hover:text-primary transition-colors">
+                {p.title}
+              </h3>
               <p className="text-sm text-muted-foreground mt-2 line-clamp-2">{p.excerpt}</p>
             </Link>
           ))}
