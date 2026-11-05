@@ -1,4 +1,5 @@
 import { createFileRoute, notFound, Link } from "@tanstack/react-router";
+import { abs } from "@/lib/seo/site";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { getProductBySlug } from "@/lib/storefront.functions";
 import { Breadcrumbs } from "@/components/breadcrumbs";
@@ -7,7 +8,10 @@ import { ld, breadcrumbLd, productLd, faqLd } from "@/lib/seo/jsonld";
 import { Star } from "lucide-react";
 
 const prodQO = (slug: string) =>
-  queryOptions({ queryKey: ["product", slug], queryFn: () => getProductBySlug({ data: { slug } }) });
+  queryOptions({
+    queryKey: ["product", slug],
+    queryFn: () => getProductBySlug({ data: { slug } }),
+  });
 
 type Faq = { q: string; a: string };
 
@@ -20,16 +24,20 @@ export const Route = createFileRoute("/product/$slug")({
   head: ({ params, loaderData }) => {
     if (!loaderData) return { meta: [{ title: "Not found" }] };
     const { product, category, reviews } = loaderData;
-    const url = `/product/${params.slug}`;
+    const url = abs(`/product/${params.slug}`);
     const title = product.seo_title ?? `${product.name} | Lumen & Oud`;
-    const desc = product.seo_description ?? product.short_description ?? product.description.slice(0, 160);
-    const img = product.images?.[0] ?? "/images/hero-home.webp";
+    const desc =
+      product.seo_description ?? product.short_description ?? product.description.slice(0, 160);
+    const img = abs(product.images?.[0] ?? "/images/hero-home.webp");
     const faqs = Array.isArray(product.faq) ? (product.faq as unknown as Faq[]) : [];
     return {
       meta: [
         { title },
         { name: "description", content: desc },
-        { name: "keywords", content: product.seo_keywords ?? `${product.name}, ${product.brand ?? ""}` },
+        {
+          name: "keywords",
+          content: product.seo_keywords ?? `${product.name}, ${product.brand ?? ""}`,
+        },
         { property: "og:title", content: title },
         { property: "og:description", content: desc },
         { property: "og:type", content: "product" },
@@ -41,28 +49,35 @@ export const Route = createFileRoute("/product/$slug")({
       ],
       links: [{ rel: "canonical", href: url }],
       scripts: [
-        ld(breadcrumbLd([
-          { name: "Home", path: "/" },
-          ...(category ? [{ name: category.name, path: `/category/${category.slug}` }] : []),
-          { name: product.name, path: url },
-        ])),
-        ld(productLd({
-          name: product.name,
-          description: product.description,
-          image: img,
-          sku: product.slug,
-          brand: product.brand ?? undefined,
-          price: Number(product.price),
-          currency: product.currency,
-          availability: product.stock > 0 ? "InStock" : "OutOfStock",
-          url,
-          ratingAvg: Number(product.rating_avg),
-          ratingCount: product.rating_count,
-          reviews: reviews.map((r) => ({
-            author: r.author_name, rating: r.rating, title: r.title ?? undefined,
-            body: r.body ?? undefined, date: r.created_at,
-          })),
-        })),
+        ld(
+          breadcrumbLd([
+            { name: "Home", path: "/" },
+            ...(category ? [{ name: category.name, path: `/category/${category.slug}` }] : []),
+            { name: product.name, path: url },
+          ]),
+        ),
+        ld(
+          productLd({
+            name: product.name,
+            description: product.description,
+            image: img,
+            sku: product.slug,
+            brand: product.brand ?? undefined,
+            price: Number(product.price),
+            currency: product.currency,
+            availability: product.stock > 0 ? "InStock" : "OutOfStock",
+            url,
+            ratingAvg: Number(product.rating_avg),
+            ratingCount: product.rating_count,
+            reviews: reviews.map((r) => ({
+              author: r.author_name,
+              rating: r.rating,
+              title: r.title ?? undefined,
+              body: r.body ?? undefined,
+              date: r.created_at,
+            })),
+          }),
+        ),
         ...(faqs.length ? [ld(faqLd(faqs))] : []),
       ],
     };
@@ -74,20 +89,30 @@ const fmt = (price: number | string, currency: string) =>
   new Intl.NumberFormat("en-US", { style: "currency", currency }).format(Number(price));
 
 function ProductPage() {
-  const { product, category, reviews, related } = useSuspenseQuery(prodQO(Route.useParams().slug)).data!;
+  const { product, category, reviews, related } = useSuspenseQuery(
+    prodQO(Route.useParams().slug),
+  ).data!;
   const faqs: Faq[] = Array.isArray(product.faq) ? (product.faq as unknown as Faq[]) : [];
   return (
     <div className="fade-in">
       <div className="container-prose pt-8">
-        <Breadcrumbs items={[
-          { name: "Home", path: "/" },
-          ...(category ? [{ name: category.name, path: `/category/${category.slug}` }] : []),
-          { name: product.name, path: `/product/${product.slug}` },
-        ]} />
+        <Breadcrumbs
+          items={[
+            { name: "Home", path: "/" },
+            ...(category ? [{ name: category.name, path: `/category/${category.slug}` }] : []),
+            { name: product.name, path: `/product/${product.slug}` },
+          ]}
+        />
       </div>
       <section className="container-prose py-10 grid gap-10 lg:grid-cols-2">
         <div className="card-surface overflow-hidden aspect-square">
-          <img src={product.images[0]} alt={product.name} className="h-full w-full object-cover" width={1000} height={1000} />
+          <img
+            src={product.images[0]}
+            alt={product.name}
+            className="h-full w-full object-cover"
+            width={1000}
+            height={1000}
+          />
         </div>
         <div>
           {product.brand && <p className="eyebrow">{product.brand}</p>}
@@ -107,7 +132,9 @@ function ProductPage() {
             <button className="btn-gold" disabled={product.stock === 0}>
               {product.stock > 0 ? "Add to bag" : "Notify me"}
             </button>
-            <Link to="/contact" className="btn-outline">Ask concierge</Link>
+            <Link to="/contact" className="btn-outline">
+              Ask concierge
+            </Link>
           </div>
 
           {faqs.length > 0 && (
@@ -134,10 +161,14 @@ function ProductPage() {
               <article key={r.id} className="card-surface p-5">
                 <div className="flex items-center justify-between">
                   <p className="font-medium text-foreground">{r.author_name}</p>
-                  <p className="text-xs text-muted-foreground">{new Date(r.created_at).toLocaleDateString()}</p>
+                  <p className="text-xs text-muted-foreground">
+                    {new Date(r.created_at).toLocaleDateString()}
+                  </p>
                 </div>
                 <div className="mt-1 flex gap-0.5 text-primary">
-                  {Array.from({ length: r.rating }).map((_, i) => <Star key={i} size={12} className="fill-primary" />)}
+                  {Array.from({ length: r.rating }).map((_, i) => (
+                    <Star key={i} size={12} className="fill-primary" />
+                  ))}
                 </div>
                 {r.title && <p className="font-medium mt-2">{r.title}</p>}
                 {r.body && <p className="text-sm text-muted-foreground mt-1">{r.body}</p>}
@@ -151,7 +182,9 @@ function ProductPage() {
         <section className="container-prose py-16">
           <h2 className="font-display text-3xl mb-6">You may also like</h2>
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            {related.map((p) => <ProductCard key={p.id} product={p} />)}
+            {related.map((p) => (
+              <ProductCard key={p.id} product={p} />
+            ))}
           </div>
         </section>
       )}

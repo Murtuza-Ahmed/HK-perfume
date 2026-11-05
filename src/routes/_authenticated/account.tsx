@@ -22,7 +22,9 @@ function AccountPage() {
   const [isAdmin, setIsAdmin] = useState(false);
   const checkAdmin = useServerFn(getAdminStatus);
   useEffect(() => {
-    checkAdmin().then((r) => setIsAdmin(r.isAdmin)).catch(() => {});
+    checkAdmin()
+      .then((r) => setIsAdmin(r.isAdmin))
+      .catch(() => {});
   }, [checkAdmin]);
   return (
     <div className="container-prose py-16 max-w-2xl">
@@ -31,7 +33,13 @@ function AccountPage() {
       <div className="mt-10 grid gap-3">
         <div className="card-surface p-5">
           <p className="eyebrow mb-2">Orders</p>
-          <p className="text-sm text-muted-foreground">You have no orders yet. <Link to="/" className="text-primary">Start exploring</Link>.</p>
+          <p className="text-sm text-muted-foreground">
+            You have no orders yet.{" "}
+            <Link to="/" className="text-primary">
+              Start exploring
+            </Link>
+            .
+          </p>
         </div>
         {isAdmin && (
           <Link to="/admin/seo" className="card-surface p-5 hover:border-primary transition-colors">
@@ -40,9 +48,14 @@ function AccountPage() {
           </Link>
         )}
         <button
-          onClick={async () => { await supabase.auth.signOut(); navigate({ to: "/" }); }}
+          onClick={async () => {
+            await supabase.auth.signOut();
+            navigate({ to: "/" });
+          }}
           className="btn-outline self-start mt-2"
-        >Sign out</button>
+        >
+          Sign out
+        </button>
       </div>
     </div>
   );

@@ -36,18 +36,26 @@ export function SiteHeader() {
               key={n.label}
               to={n.to as never}
               params={(n as { params?: object }).params as never}
-              className="text-sm text-muted-foreground hover:text-primary transition-colors"
-              activeProps={{ className: "text-primary text-sm" }}
+              className="nav-link text-sm text-muted-foreground hover:text-primary transition-colors"
+              activeProps={{ className: "nav-link text-primary text-sm" }}
             >
               {n.label}
             </Link>
           ))}
         </nav>
         <div className="hidden md:flex items-center gap-2">
-          <Link to="/search" aria-label="Search" className="p-2 text-muted-foreground hover:text-primary">
+          <Link
+            to="/search"
+            aria-label="Search"
+            className="p-2 text-muted-foreground hover:text-primary"
+          >
             <Search size={18} />
           </Link>
-          <Link to="/account" aria-label="Account" className="p-2 text-muted-foreground hover:text-primary">
+          <Link
+            to="/account"
+            aria-label="Account"
+            className="p-2 text-muted-foreground hover:text-primary"
+          >
             <User size={18} />
           </Link>
         </div>
@@ -74,8 +82,20 @@ export function SiteHeader() {
               </Link>
             ))}
             <div className="flex gap-4 pt-2 border-t border-border">
-              <Link to="/search" onClick={() => setOpen(false)} className="text-sm text-muted-foreground">Search</Link>
-              <Link to="/account" onClick={() => setOpen(false)} className="text-sm text-muted-foreground">Account</Link>
+              <Link
+                to="/search"
+                onClick={() => setOpen(false)}
+                className="text-sm text-muted-foreground"
+              >
+                Search
+              </Link>
+              <Link
+                to="/account"
+                onClick={() => setOpen(false)}
+                className="text-sm text-muted-foreground"
+              >
+                Account
+              </Link>
             </div>
           </div>
         </div>

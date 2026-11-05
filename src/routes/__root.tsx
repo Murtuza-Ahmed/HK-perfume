@@ -1,4 +1,5 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { abs } from "@/lib/seo/site";
 import {
   Outlet,
   Link,
@@ -13,6 +14,7 @@ import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { SiteHeader } from "../components/site-header";
 import { SiteFooter } from "../components/site-footer";
+import { Toaster } from "../components/toast";
 import { ld, organizationLd, websiteLd } from "../lib/seo/jsonld";
 import "@fontsource/cormorant-garamond/400.css";
 import "@fontsource/cormorant-garamond/500.css";
@@ -87,12 +89,19 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: "Lumen & Oud — Fine Fragrances, Watches & Topis" },
-      { name: "description", content: "A curated boutique of niche perfumes, mechanical watches, and handcrafted Islamic topis." },
+      {
+        name: "description",
+        content:
+          "A curated boutique of niche perfumes, mechanical watches, and handcrafted Islamic topis.",
+      },
       { name: "author", content: "Lumen & Oud" },
       { name: "theme-color", content: "#1b1726" },
       { property: "og:site_name", content: "Lumen & Oud" },
       { property: "og:title", content: "Lumen & Oud" },
-      { property: "og:description", content: "Niche perfumes, mechanical watches, and handcrafted Islamic topis." },
+      {
+        property: "og:description",
+        content: "Niche perfumes, mechanical watches, and handcrafted Islamic topis.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:site", content: "@lumenandoud" },
@@ -105,7 +114,13 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { rel: "icon", href: "/favicon.ico" },
     ],
     scripts: [
-      ld(organizationLd({ name: "Lumen & Oud", url: "/", social: { instagram: "https://instagram.com/lumenandoud" } })),
+      ld(
+        organizationLd({
+          name: "Lumen & Oud",
+          url: abs("/"),
+          social: { instagram: "https://instagram.com/lumenandoud" },
+        }),
+      ),
       ld(websiteLd({ name: "Lumen & Oud" })),
     ],
   }),
@@ -140,6 +155,7 @@ function RootComponent() {
           <Outlet />
         </main>
         <SiteFooter />
+        <Toaster />
       </div>
     </QueryClientProvider>
   );
